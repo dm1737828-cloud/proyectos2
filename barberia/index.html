@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barbería - Gestión de Citas</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="encabezado">
+    <h1>Barbería - Gestión de Citas</h1>
+    <button id="botonMenu" class="boton-menu" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">&#9776;</button>
+    <nav id="menuPrincipal" class="menu" aria-label="Menú principal">
+      <button type="button" data-seccion="inicio">Inicio</button>
+      <button type="button" data-seccion="clientes">Clientes</button>
+      <button type="button" data-seccion="barberos">Barberos</button>
+      <button type="button" data-seccion="servicios">Servicios</button>
+      <button type="button" data-seccion="nueva-cita">Nueva cita</button>
+      <button type="button" data-seccion="citas">Citas</button>
+      <button type="button" data-seccion="reportes">Reportes</button>
+    </nav>
+  </header>
+
+  <div id="mensaje" class="mensaje oculto" role="status" aria-live="polite"></div>
+
+  <main>
+    <section id="seccion-inicio" class="seccion">
+      <h2>Inicio</h2>
+      <div class="tarjeta">
+        <h3>Accesos rápidos</h3>
+        <div class="acciones">
+          <button type="button" class="boton" data-seccion="nueva-cita">Agendar cita</button>
+          <button type="button" class="boton boton-secundario" data-seccion="clientes">Registrar cliente</button>
+          <button type="button" class="boton boton-secundario" data-seccion="citas">Ver todas las citas</button>
+        </div>
+      </div>
+      <div class="tarjeta">
+        <h3>Citas de hoy</h3>
+        <div class="tabla-scroll">
+          <table>
+            <thead><tr><th>Hora</th><th>Cliente</th><th>Barbero</th><th>Servicios</th><th>Estado</th></tr></thead>
+            <tbody id="tbodyInicio"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="seccion-clientes" class="seccion oculto">
+      <h2>Clientes</h2>
+      <form id="formCliente" class="tarjeta formulario" novalidate>
+        <div class="campo"><label for="cliCedula">Cédula</label><input id="cliCedula" name="cedula" type="text"><span class="error" data-error-para="cedula"></span></div>
+        <div class="campo"><label for="cliNombre">Nombre completo</label><input id="cliNombre" name="nombre" type="text"><span class="error" data-error-para="nombre"></span></div>
+        <div class="campo"><label for="cliTelefono">Teléfono (8 dígitos)</label><input id="cliTelefono" name="telefono" type="tel"><span class="error" data-error-para="telefono"></span></div>
+        <div class="campo"><label for="cliCorreo">Correo</label><input id="cliCorreo" name="correo" type="email"><span class="error" data-error-para="correo"></span></div>
+        <div class="campo"><label for="cliNacimiento">Fecha de nacimiento</label><input id="cliNacimiento" name="fechaNacimiento" type="date"><span class="error" data-error-para="fechaNacimiento"></span></div>
+        <div class="acciones">
+          <button type="submit" class="boton">Guardar cliente</button>
+          <button type="button" class="boton boton-secundario cancelar-edicion oculto">Cancelar edición</button>
+        </div>
+      </form>
+      <div class="tarjeta">
+        <div class="campo"><label for="buscarCliente">Buscar por nombre o cédula</label><input id="buscarCliente" type="search"></div>
+        <div class="tabla-scroll">
+          <table>
+            <thead><tr><th>Cédula</th><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Nacimiento</th><th>Acciones</th></tr></thead>
+            <tbody id="tbodyClientes"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="seccion-barberos" class="seccion oculto">
+      <h2>Barberos</h2>
+      <form id="formBarbero" class="tarjeta formulario" novalidate>
+        <div class="campo"><label for="barCodigo">Código</label><input id="barCodigo" name="codigo" type="text"><span class="error" data-error-para="codigo"></span></div>
+        <div class="campo"><label for="barNombre">Nombre</label><input id="barNombre" name="nombre" type="text"><span class="error" data-error-para="nombre"></span></div>
+        <div class="campo"><label for="barEspecialidad">Especialidad</label><input id="barEspecialidad" name="especialidad" type="text"><span class="error" data-error-para="especialidad"></span></div>
+        <div class="campo"><label for="barInicio">Hora de inicio</label><input id="barInicio" name="horaInicio" type="time"><span class="error" data-error-para="horaInicio"></span></div>
+        <div class="campo"><label for="barFin">Hora de fin</label><input id="barFin" name="horaFin" type="time"><span class="error" data-error-para="horaFin"></span></div>
+        <div class="acciones">
+          <button type="submit" class="boton">Guardar barbero</button>
+          <button type="button" class="boton boton-secundario cancelar-edicion oculto">Cancelar edición</button>
+        </div>
+      </form>
+      <div class="tarjeta tabla-scroll">
+        <table>
+          <thead><tr><th>Código</th><th>Nombre</th><th>Especialidad</th><th>Horario</th><th>Acciones</th></tr></thead>
+          <tbody id="tbodyBarberos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="seccion-servicios" class="seccion oculto">
+      <h2>Servicios</h2>
+      <form id="formServicio" class="tarjeta formulario" novalidate>
+        <div class="campo"><label for="serNombre">Nombre</label><input id="serNombre" name="nombre" type="text"><span class="error" data-error-para="nombre"></span></div>
+        <div class="campo"><label for="serDescripcion">Descripción</label><input id="serDescripcion" name="descripcion" type="text"><span class="error" data-error-para="descripcion"></span></div>
+        <div class="campo"><label for="serPrecio">Precio (₡)</label><input id="serPrecio" name="precio" type="number" min="1" step="any"><span class="error" data-error-para="precio"></span></div>
+        <div class="campo"><label for="serDuracion">Duración (minutos)</label><input id="serDuracion" name="duracionMin" type="number" min="1" step="1"><span class="error" data-error-para="duracionMin"></span></div>
+        <div class="acciones">
+          <button type="submit" class="boton">Guardar servicio</button>
+          <button type="button" class="boton boton-secundario cancelar-edicion oculto">Cancelar edición</button>
+        </div>
+      </form>
+      <div class="tarjeta tabla-scroll">
+        <table>
+          <thead><tr><th>Código</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Duración</th><th>Acciones</th></tr></thead>
+          <tbody id="tbodyServicios"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="seccion-nueva-cita" class="seccion oculto">
+      <h2 id="tituloFormCita">Nueva cita</h2>
+      <form id="formCita" class="tarjeta formulario" novalidate>
+        <div class="campo"><label for="citCliente">Cliente</label><select id="citCliente" name="cedulaCliente"></select><span class="error" data-error-para="cedulaCliente"></span></div>
+        <div class="campo"><label for="citBarbero">Barbero</label><select id="citBarbero" name="codigoBarbero"></select><span class="error" data-error-para="codigoBarbero"></span></div>
+        <div class="campo"><label for="citFecha">Fecha</label><input id="citFecha" name="fecha" type="date"><span class="error" data-error-para="fecha"></span></div>
+        <div class="campo"><label for="citHora">Hora de inicio</label><input id="citHora" name="hora" type="time"><span class="error" data-error-para="hora"></span></div>
+        <fieldset class="campo campo-ancho">
+          <legend>Servicios</legend>
+          <div id="serviciosCita" class="lista-opciones"></div>
+          <span class="error" data-error-para="servicio"></span>
+        </fieldset>
+        <p id="resumenCita" class="resumen campo-ancho">Total: ₡0 - Duración: 0 min</p>
+        <div class="acciones">
+          <button type="submit" id="botonGuardarCita" class="boton">Agendar cita</button>
+          <button type="button" id="cancelarReprogramacion" class="boton boton-secundario oculto">Cancelar reprogramación</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="seccion-citas" class="seccion oculto">
+      <h2>Citas</h2>
+      <form id="formBuscarCodigo" class="tarjeta formulario" novalidate>
+        <div class="campo"><label for="buscarCodigo">Buscar cita por código</label><input id="buscarCodigo" type="text" placeholder="CIT-0001"></div>
+        <div class="acciones"><button type="submit" class="boton">Buscar</button></div>
+        <div id="detalleCita" class="campo-ancho" aria-live="polite"></div>
+      </form>
+      <div class="tarjeta">
+        <div class="formulario">
+          <div class="campo"><label for="filtroFecha">Fecha</label><input id="filtroFecha" type="date"></div>
+          <div class="campo"><label for="filtroBarbero">Barbero</label><select id="filtroBarbero"></select></div>
+          <div class="campo"><label for="filtroEstado">Estado</label><select id="filtroEstado"></select></div>
+          <div class="acciones"><button type="button" id="limpiarFiltros" class="boton boton-secundario">Limpiar filtros</button></div>
+        </div>
+        <div class="tabla-scroll">
+          <table>
+            <thead><tr><th>Código</th><th>Cliente</th><th>Barbero</th><th>Servicios</th><th>Fecha</th><th>Hora</th><th>Costo</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="tbodyCitas"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="seccion-reportes" class="seccion oculto">
+      <h2>Reportes</h2>
+      <div id="contenidoReportes"></div>
+    </section>
+  </main>
+
+  <footer class="pie"><p>Proyecto Programación III - UISIL</p></footer>
+
+  <script src="js/almacenamiento.js"></script>
+  <script src="js/interfaz.js"></script>
+  <script src="js/administrador.js"></script>
+  <script src="js/clientes.js"></script>
+  <script src="js/barberos.js"></script>
+  <script src="js/servicios.js"></script>
+  <script src="js/citas.js"></script>
+  <script src="js/reportes.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
